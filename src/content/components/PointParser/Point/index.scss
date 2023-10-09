@@ -1,0 +1,14 @@
+@import '../../../global.scss';
+
+
+.div {
+	position: fixed;
+
+	display: flex;
+
+	color: $blue;
+	background-color: $blue;
+
+	font-size: 13px;
+	white-space: nowrap;
+}

@@ -1,0 +1,10 @@
+@import '../../global.scss';
+
+
+.div {
+	& div {
+		position: fixed;
+
+		background-color: $blue;
+	}
+}
