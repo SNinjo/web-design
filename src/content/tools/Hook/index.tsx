@@ -2,20 +2,22 @@
 import { useEffect, useState } from 'react';
 import { Position, Size } from 'outward';
 
+import { sendMessage } from '../../../interface/Message';
 
 
 
-export function useScreen(): {
-	screenSize: Size,
+
+export function useWindow(): {
+	windowSize: Size,
 } {
-	const [screenSize, setScreenSize] = useState(new Size(window.innerWidth, window.innerHeight));
+	const [windowSize, setWindowSize] = useState(new Size(window.innerWidth, window.innerHeight));
 	useEffect(() => {
-		const updateScreenSize = () => setScreenSize(new Size(window.innerWidth, window.innerHeight));
-		window.addEventListener('resize', updateScreenSize);
-		return () => window.removeEventListener('resize', updateScreenSize);
+		const updateWindowSize = () => setWindowSize(new Size(window.innerWidth, window.innerHeight));
+		window.addEventListener('resize', updateWindowSize);
+		return () => window.removeEventListener('resize', updateWindowSize);
 	}, []);
 	return {
-		screenSize,
+		windowSize,
 	};
 }
 
@@ -74,4 +76,30 @@ export function useCursor(): {
 		leftButtonPressedPosition,
 		leftButtonReleasedPosition,
 	};
+}
+
+
+
+
+export function useChromeStorage<T>(key: string, initialValue: T): [T, (value: T) => void] {
+	const taskUpdateStorageValueToEachTab = `update chrome storage value with key "${key}" to each tab`;
+	const [value, setValue] = useState(initialValue);
+	const updateValue = async (value: T) => {
+		await chrome.storage.local.set({ [key]: value });
+		sendMessage({
+			task: taskUpdateStorageValueToEachTab,
+			value,
+		});
+	}
+
+	useEffect(() => {
+		chrome.storage.local.get(key, (storage) => setValue(storage[key]));
+
+		const receivingUpdatingTaskMessage = (message: { task: string, value: T }) => {
+			if (message.task === taskUpdateStorageValueToEachTab) setValue(message.value);
+		}
+		chrome.runtime.onMessage.addListener(receivingUpdatingTaskMessage);
+		() => chrome.runtime.onMessage.removeListener(receivingUpdatingTaskMessage);
+	}, []);
+	return [value, updateValue];
 }

@@ -4,11 +4,18 @@
 	"name": "Web Design",
 	"version": "1.0.1",
 	"description": "Web Design is a Chrome Extension that assists with UI/ UX design and front-end development.",
-	"icons": { "128": "/icon.png" },
+	"icons": { "128": "icon.png" },
 
+	"permissions": [
+		"tabs",
+		"storage"
+	],
 	"action": {
-		"default_icon": "/icon.png"
-	}, 
+		"default_icon": "icon.png",
+		"default_title": "Select mode | Web Design",
+		"default_popup": "popup.html"
+	},
+	"options_page": "options.html",
 	"background": {
 		"service_worker": "background.bundle.js",
 		"type": "module"

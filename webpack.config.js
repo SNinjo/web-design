@@ -7,6 +7,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const WebpackShellPluginNext = require('webpack-shell-plugin-next');
 const TerserWebpackPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const HtmlWebPackPlugin = require('html-webpack-plugin');
 
 
 const clearBuildDir = {
@@ -113,7 +114,7 @@ const content = {
 			filename: './content.bundle.css',
 		}),
 	],
-};
+}
 
 const background = {
 	entry: './src/background/',
@@ -133,7 +134,135 @@ const background = {
 		filename: 'background.bundle.js',
 		path: path.resolve(__dirname, 'build'),
 	},
-};
+}
+
+const popup = {
+	entry: './src/popup/index.tsx',
+	module: {
+		rules: [
+			{
+				test: /\.tsx?$/,
+				use: 'ts-loader',
+				exclude: /node_modules/,
+			},
+			{
+				test: /\.css$/,
+				use: [
+					{
+						loader: MiniCssExtractPlugin.loader,
+					},
+					{
+						loader: 'css-loader',
+					},
+				],
+			},
+			{
+				test: /\.scss$/,
+				use: [
+					{
+						loader: MiniCssExtractPlugin.loader,
+					},
+					{
+						loader: 'css-loader',
+						options: {
+							modules: { localIdentName: '[name]__[local]___[hash:base64:5]' },
+						},
+					},
+					{
+						loader: 'sass-loader',
+					},
+				],
+			},
+		]
+	},
+	resolve: {
+		extensions: ['.tsx', '.ts', '.js'],
+	},
+	plugins: [
+		new MiniCssExtractPlugin({
+			filename: './popup.bundle.css',
+		}),
+		new HtmlWebPackPlugin({
+			template: './src/popup/index.html',
+			filename: 'popup.html',
+		}),
+	],
+	optimization: {
+		minimizer: [
+			new TerserWebpackPlugin({
+				extractComments: false,
+			})
+		],
+	},
+	output: {
+		filename: 'popup.bundle.js',
+		path: path.join(__dirname, 'build'),
+	},
+}
+
+const options = {
+	entry: './src/options/index.tsx',
+	module: {
+		rules: [
+			{
+				test: /\.tsx?$/,
+				use: 'ts-loader',
+				exclude: /node_modules/,
+			},
+			{
+				test: /\.css$/,
+				use: [
+					{
+						loader: MiniCssExtractPlugin.loader,
+					},
+					{
+						loader: 'css-loader',
+					},
+				],
+			},
+			{
+				test: /\.scss$/,
+				use: [
+					{
+						loader: MiniCssExtractPlugin.loader,
+					},
+					{
+						loader: 'css-loader',
+						options: {
+							modules: { localIdentName: '[name]__[local]___[hash:base64:5]' },
+						},
+					},
+					{
+						loader: 'sass-loader',
+					},
+				],
+			},
+		]
+	},
+	resolve: {
+		extensions: ['.tsx', '.ts', '.js'],
+	},
+	plugins: [
+		new MiniCssExtractPlugin({
+			filename: './options.bundle.css',
+		}),
+		new HtmlWebPackPlugin({
+			template: './src/options/index.html',
+			filename: 'options.html',
+		}),
+	],
+	optimization: {
+		minimizer: [
+			new TerserWebpackPlugin({
+				extractComments: false,
+			})
+		],
+	},
+	output: {
+		filename: 'options.bundle.js',
+		path: path.join(__dirname, 'build'),
+	},
+}
 
 
 module.exports = [
@@ -141,4 +270,6 @@ module.exports = [
 	public,
 	content,
 	background,
+	popup,
+	options,
 ];

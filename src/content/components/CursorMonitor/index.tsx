@@ -1,12 +1,12 @@
 import React from 'react';
 import { Position } from 'outward';
 
-import { useCursor, useScreen } from '../../tools/Hook';
+import { useCursor, useWindow } from '../../tools/Hook';
 import style from './index.scss';
 
 
 const CursorMonitor = () => {
-	const { screenSize } = useScreen();
+	const { windowSize } = useWindow();
 	const { cursorPosition } = useCursor();
 
 	const widthLine = 1;
@@ -27,7 +27,7 @@ const CursorMonitor = () => {
 					height: widthLine,
 
 					display: 'flex',
-					alignItems: ((screenSize.height - cursorPosition.y) >= 40)? 'flex-start' : 'flex-end',
+					alignItems: ((windowSize.height - cursorPosition.y) >= 40)? 'flex-start' : 'flex-end',
 					justifyContent: 'center',
 				}}
 			>
@@ -42,7 +42,7 @@ const CursorMonitor = () => {
 
 					display: 'flex',
 					alignItems: 'center',
-					justifyContent: ((screenSize.width - cursorPosition.x) >= 80)? 'flex-start' : 'flex-end',
+					justifyContent: ((windowSize.width - cursorPosition.x) >= 80)? 'flex-start' : 'flex-end',
 				}}
 			>
 				<span>{cursorPosition.y}px</span>	

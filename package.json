@@ -20,6 +20,7 @@
 		"eslint": "^8.49.0",
 		"eslint-plugin-react": "^7.33.2",
 		"expose-loader": "^4.1.0",
+		"html-webpack-plugin": "^5.5.3",
 		"mini-css-extract-plugin": "^2.7.2",
 		"node-sass": "^8.0.0",
 		"sass-loader": "^13.2.0",
